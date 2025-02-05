@@ -62,7 +62,7 @@ pipeline {
         }
         stage ('buid and push docker image') {
             environment {
-                DOCKER_Image = "tiwarishivam/cicd:${BUILD_NUMBER}"
+                DOCKER_IMAGE = "tiwarishivam/cicd:${BUILD_NUMBER}"
                 
                 // The DOCKER_Image variable is used to store the name of the Docker image that will be built and pushed to Docker Hub.
 
@@ -71,24 +71,26 @@ pipeline {
                 // The Registry_Credentials variable is used to store the Docker Hub credentials needed to push the Docker image.
             }
             steps {
-                sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t $(DOCKER_Image) .'
+                script {
+                    sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t $(DOCKER_Image) .'
 
 
-                /* The docker build command is used to build the Docker image from the Dockerfile in the project directory.
-                docker build: This command is used to build a Docker image from the contents of a directory, using a Dockerfile to define the image configuration
-                -t $(DOCKER_Image): The -t flag is used to tag the resulting image with a name. $(DOCKER_Image) is a placeholder (in this case, a shell variable) for the name of the Docker
-                image you want to create. For example, it might be something like abhishekf5/ultimate-cicd:latest.
-                The dot refers to the current directory where the Docker build context is located
-                */
+                    /* The docker build command is used to build the Docker image from the Dockerfile in the project directory.
+                    docker build: This command is used to build a Docker image from the contents of a directory, using a Dockerfile to define the image configuration
+                    -t $(DOCKER_Image): The -t flag is used to tag the resulting image with a name. $(DOCKER_Image) is a placeholder (in this case, a shell variable) for the name of the Docker
+                    image you want to create. For example, it might be something like abhishekf5/ultimate-cicd:latest.
+                    The dot refers to the current directory where the Docker build context is located
+                    */
 
-                def dockerImage = docker.image("${DOCKER_IMAGE}")
+                    def dockerImage = docker.image("${DOCKER_IMAGE}")
 
-                // The docker.image step is used to create a Docker image object from the specified image name.
+                    // The docker.image step is used to create a Docker image object from the specified image name.
 
-                docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
-                    dockerImage.push()
+                    docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                        dockerImage.push()
 
-                    // The dockerImage.push() command is used to push the Docker image to Docker Hub with the tag latest.
+                        // The dockerImage.push() command is used to push the Docker image to Docker Hub with the tag latest.
+                    }
                 }
             }
         }
