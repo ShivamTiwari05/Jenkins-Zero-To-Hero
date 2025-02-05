@@ -1,7 +1,7 @@
 pipeline {
-    Agent {
+    agent {
         // The agent section specifies where the entire Pipeline, or a specific stage, will execute in the Jenkins environment depending on where the agent section is placed
-        Docker {
+        docker {
             // Docker is a parameter, which support wide variety of use cases.
 
             image 'tiwarishivam/maven-docker-image:latest'
@@ -48,7 +48,7 @@ pipeline {
         }
         stage ('SonarQube Analysis') {
             environment {
-                SONAR_URL = "http://http://13.53.138.228:9000"
+                SONAR_URL = "http://13.53.138.228:9000"
 
                 // The SONAR_URL variable is used to store the URL of the SonarQube server.
             }
@@ -66,7 +66,7 @@ pipeline {
                 
                 // The DOCKER_Image variable is used to store the name of the Docker image that will be built and pushed to Docker Hub.
 
-                Registry_Credentials = credentials('docker-cred')
+                REGISTRY_CREDENTIALS = credentials('docker-cred')
 
                 // The Registry_Credentials variable is used to store the Docker Hub credentials needed to push the Docker image.
             }
@@ -81,11 +81,11 @@ pipeline {
                 The dot refers to the current directory where the Docker build context is located
                 */
 
-                def dockerImage = docker.image('$(DOCKER_Image)')
+                def dockerImage = docker.image("${DOCKER_IMAGE}")
 
                 // The docker.image step is used to create a Docker image object from the specified image name.
 
-                dockerImage.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
                     dockerImage.push()
 
                     // The dockerImage.push() command is used to push the Docker image to Docker Hub with the tag latest.
@@ -108,9 +108,9 @@ pipeline {
                         git config user.email "kumarshivam1895@gmail.com"
                         git config user.name "ShivamTiwari05"
                         BUILD_NUMBER=${BUILD_NUMBER}
-                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/" java-maven-sonar-argocd-helm-k8s/k8s/deployment.yaml
+                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yaml
                         git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yaml
-                        git commit -m "Update deployment.yaml with new image tag"
+                        git commit -m "Update deployment with new image tag"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                         '''
 
