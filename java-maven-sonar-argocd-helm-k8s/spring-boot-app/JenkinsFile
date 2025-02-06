@@ -4,7 +4,7 @@ pipeline {
         docker {
             // Docker is a parameter, which support wide variety of use cases.
 
-            image 'abhishekf5/maven-abhishek-docker-agent:v1'
+            image 'tiwarishivam/maven-docker-image:latest'
 
 
             /* The image tag (maven-abhishek-docker-agent:v1) suggests it is a specialized agent image tailored for tasks involving Maven, which is a build automation 
@@ -48,7 +48,7 @@ pipeline {
         }
         stage ('SonarQube Analysis') {
             environment {
-                SONAR_URL = "http://13.53.138.228:9000"
+                SONAR_URL = "http://16.16.253.4:9000"
 
                 // The SONAR_URL variable is used to store the URL of the SonarQube server.
             }
