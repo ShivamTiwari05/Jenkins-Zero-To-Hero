@@ -4,7 +4,7 @@ pipeline {
         docker {
             // Docker is a parameter, which support wide variety of use cases.
 
-            image 'maven:3.8.6-openjdk-11'
+            image 'tiwarishivam/maven-docker-agent:v1'
 
 
             /* The image tag (maven-abhishek-docker-agent:v1) suggests it is a specialized agent image tailored for tasks involving Maven, which is a build automation 
@@ -62,7 +62,7 @@ pipeline {
         }
         stage ('buid and push docker image') {
             environment {
-                DOCKER_IMAGE = "maven:3.8.6-openjdk-11"
+                DOCKER_IMAGE = "tiwarishivam/cicd:${BUILD_NUMBER}"
                 
                 // The DOCKER_Image variable is used to store the name of the Docker image that will be built and pushed to Docker Hub.
 
