@@ -62,7 +62,7 @@ pipeline {
         }
         stage ('buid and push docker image') {
             environment {
-                DOCKER_IMAGE = "tiwarishivam/cicd:${BUILD_NUMBER}"
+                DOCKER_IMAGE = "maven:3.8.6-openjdk-11"
                 
                 // The DOCKER_Image variable is used to store the name of the Docker image that will be built and pushed to Docker Hub.
 
