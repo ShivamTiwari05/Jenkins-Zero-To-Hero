@@ -4,7 +4,7 @@ pipeline {
         docker {
             // Docker is a parameter, which support wide variety of use cases.
 
-            image 'maven:3.8.6-openjdk-11-slim'
+            image 'tiwarishivam/maven-docker-image:latest'
 
 
             /* The image tag (maven-abhishek-docker-agent:v1) suggests it is a specialized agent image tailored for tasks involving Maven, which is a build automation 
@@ -53,7 +53,7 @@ pipeline {
                 // The SONAR_URL variable is used to store the URL of the SonarQube server.
             }
             steps {
-                withcredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                withcredentials([string(credentialsId: 'sonarqube', variable: 'TOKEN')]) {
                     sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
 
                     // The mvn sonar:sonar command is used to run the SonarQube analysis on the project. The -Dsonar.login flag specifies the SonarQube authentication token, and the -Dsonar.host.url flag specifies the SonarQube server URL.
