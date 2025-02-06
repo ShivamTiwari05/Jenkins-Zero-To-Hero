@@ -53,8 +53,8 @@ pipeline {
                 // The SONAR_URL variable is used to store the URL of the SonarQube server.
             }
             steps {
-                withcredentials([string(credentialsId: 'sonarqube', variable: 'TOKEN')]) {
-                    sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                    sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=${SONAR_AUTH_TOKEN} -Dsonar.host.url=${SONAR_URL}'
 
                     // The mvn sonar:sonar command is used to run the SonarQube analysis on the project. The -Dsonar.login flag specifies the SonarQube authentication token, and the -Dsonar.host.url flag specifies the SonarQube server URL.
                 }
