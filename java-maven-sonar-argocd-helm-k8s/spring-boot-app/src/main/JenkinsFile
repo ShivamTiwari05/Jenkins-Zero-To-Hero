@@ -4,7 +4,7 @@ pipeline {
         docker {
             // Docker is a parameter, which support wide variety of use cases.
 
-            image 'tiwarishivam/maven-docker-image:latest'
+            image 'maven:3.8.6-openjdk-11'
 
 
             /* The image tag (maven-abhishek-docker-agent:v1) suggests it is a specialized agent image tailored for tasks involving Maven, which is a build automation 
