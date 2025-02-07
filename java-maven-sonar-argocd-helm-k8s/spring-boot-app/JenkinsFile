@@ -114,6 +114,7 @@ pipeline {
                 // The GIT_USER_NAME and GIT_REPO_NAME variables are used to store the GitHub username and repository name, respectively.
             }
             steps {
+                    checkout scm
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                         git config user.email "kumarshivam1895@gmail.com"
