@@ -60,7 +60,13 @@ pipeline {
                 }
             }
         } 
-        
+        stage('Install Docker') {
+            steps {
+                sh 'apt-get update && apt-get install -y docker.io'
+            }
+        }
+
+
         stage ('buid and push docker image') {
             environment {
                 DOCKER_IMAGE = "tiwarishivam/cicd:${BUILD_NUMBER}"
