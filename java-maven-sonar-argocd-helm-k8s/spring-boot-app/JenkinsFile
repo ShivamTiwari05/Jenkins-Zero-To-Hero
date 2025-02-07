@@ -117,6 +117,7 @@ pipeline {
                     checkout scm
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
+                        git config --global --add safe.directory /var/lib/jenkins/workspace/CICD-app
                         ls -a
                         git status
                         git config user.email "kumarshivam1895@gmail.com"
