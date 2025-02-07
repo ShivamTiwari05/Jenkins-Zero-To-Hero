@@ -48,7 +48,7 @@ pipeline {
         }
         stage ('SonarQube Analysis') {
             environment {
-                SONAR_URL = "http://16.16.253.4:9000"
+                SONAR_URL = "http://13.53.192.208:9000"
 
                 // The SONAR_URL variable is used to store the URL of the SonarQube server.
             }
