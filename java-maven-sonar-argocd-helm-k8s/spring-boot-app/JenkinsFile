@@ -65,33 +65,47 @@ pipeline {
                 script {
                     sh '''
                     # Update the package list
-                    apt-get update
+                    sudo apt-get update
 
                     # Install required dependencies, including gnupg for handling GPG keys
-                    apt-get install -y apt-transport-https ca-certificates curl software-properties-common gnupg
+                    sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common gnupg
 
                     # Add Docker’s official GPG key (avoid apt-key deprecated warning)
-                    curl -fsSL https://download.docker.com/linux/debian/gpg | tee /etc/apt/trusted.gpg.d/docker.asc
+                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/trusted.gpg.d/docker.asc
 
-                    # Set up Docker repository for Debian (use the correct repository for Debian Bullseye)
-                    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/debian bullseye stable" | tee /etc/apt/sources.list.d/docker.list
+                    # Set up Docker repository for Ubuntu
+                    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
 
                     # Update package list again to include Docker repo
-                    apt-get update
+                    sudo apt-get update
 
                     # Install Docker Engine and related packages
-                    apt-get install -y docker-ce docker-ce-cli containerd.io
+                    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
                     # Enable and start Docker service
-                    systemctl enable docker
-                    systemctl start docker
+                    sudo systemctl enable docker
+                    sudo systemctl start docker
+
+                    # Install Docker Compose (use the official Docker Compose plugin)
+                    sudo apt-get install -y docker-compose-plugin
+
+                    # If there is an error with the plugin, install Docker Compose manually
+                    if ! command -v docker-compose &> /dev/null; then
+                        echo "Installing Docker Compose manually"
+                        curl -L https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+                        sudo chmod +x /usr/local/bin/docker-compose
+                    fi
 
                     # Verify Docker installation
-                    docker run hello-world
-                '''
+                    sudo docker run hello-world
+
+                    # Verify Docker Compose installation
+                    docker-compose --version
+                    '''
                 }
             }
         }
+
 
 
 
