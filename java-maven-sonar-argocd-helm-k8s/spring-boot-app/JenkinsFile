@@ -116,7 +116,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                         git config --global --add safe.directory /var/lib/jenkins/workspace/CICD-app
-                        chown -R jenkins:jenkins /var/lib/jenkins/workspace/CICD-build
+                        chown -R /var/lib/jenkins/workspace/CICD-build
                         git config --global --add safe.directory '*'
                         ls -a
                         git status
