@@ -63,7 +63,9 @@ pipeline {
         stage('Install Docker') {
             steps {
                 script {
-                     sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
+                    sh -c apt-get -qq update >/dev/null
+                    sh -c DEBIAN_FRONTEND=noninteractive apt-get -y -qq install ca-certificates curl apt-utils >/dev/null
+                    sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
                     sh 'sh get-docker.sh'
                 }
             }
