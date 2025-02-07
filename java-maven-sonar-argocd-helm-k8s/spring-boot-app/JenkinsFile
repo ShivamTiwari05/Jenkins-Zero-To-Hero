@@ -64,19 +64,35 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    # Update the package list
                     apt-get update
+
+                    # Install required dependencies, including gnupg for handling GPG keys
                     apt-get install -y apt-transport-https ca-certificates curl software-properties-common gnupg
-                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-                    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+                    # Add Docker’s official GPG key (avoid apt-key deprecated warning)
+                    curl -fsSL https://download.docker.com/linux/debian/gpg | tee /etc/apt/trusted.gpg.d/docker.asc
+
+                    # Set up Docker repository for Debian (use the correct repository for Debian Bullseye)
+                    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/debian bullseye stable" | tee /etc/apt/sources.list.d/docker.list
+
+                    # Update package list again to include Docker repo
                     apt-get update
+
+                    # Install Docker Engine and related packages
                     apt-get install -y docker-ce docker-ce-cli containerd.io
+
+                    # Enable and start Docker service
                     systemctl enable docker
                     systemctl start docker
+
+                    # Verify Docker installation
                     docker run hello-world
-                    '''
+                '''
                 }
             }
         }
+
 
 
         stage ('buid and push docker image') {
