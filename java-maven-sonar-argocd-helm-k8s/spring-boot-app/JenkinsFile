@@ -34,6 +34,7 @@ pipeline {
                 specifies the URL of the Git repository.
                 In this case, the branch is 'main' 
                 */
+                git config user.email "kumarshivam1895@gmail.com"
                 }
         }
 
