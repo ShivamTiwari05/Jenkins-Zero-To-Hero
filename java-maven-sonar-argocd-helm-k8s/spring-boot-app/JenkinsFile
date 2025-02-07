@@ -48,18 +48,27 @@ pipeline {
         }
         stage ('SonarQube Analysis') {
             environment {
-                SONAR_URL = "http://13.53.192.208:9000"
+                SONAR_URL = "http://16.16.253.4:9000"
 
                 // The SONAR_URL variable is used to store the URL of the SonarQube server.
             }
             steps {
-                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'TOKEN')]) {
                     sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
 
                     // The mvn sonar:sonar command is used to run the SonarQube analysis on the project. The -Dsonar.login flag specifies the SonarQube authentication token, and the -Dsonar.host.url flag specifies the SonarQube server URL.
                 }
             }
         }
+        stage('Install Docker') {
+            steps {
+                script {
+                     sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
+                    sh 'sh get-docker.sh'
+                }
+            }
+        }
+
         stage ('buid and push docker image') {
             environment {
                 DOCKER_IMAGE = "tiwarishivam/cicd:${BUILD_NUMBER}"
